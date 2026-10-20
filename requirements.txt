@@ -1,0 +1,9 @@
+pandas>=2.2,<4
+numpy>=2.0,<3
+pyarrow>=17,<25
+huggingface-hub>=0.26,<2
+jupyterlab>=4,<6
+nbconvert>=7,<8
+matplotlib>=3.8,<5
+Pillow>=10,<13
+PyYAML>=6,<7

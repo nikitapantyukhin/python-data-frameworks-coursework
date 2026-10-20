@@ -1,0 +1,46 @@
+# Local environments and Python caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Jupyter and IDE state
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Local notes and executed notebooks
+.local/
+/reports/executed_notebooks/
+
+# Source, processed and synthetic datasets
+/data/**
+!/data/README.md
+!/data/raw/
+!/data/raw/geo_reviews/
+!/data/raw/hard_hat/
+!/data/processed/
+!/data/synthetic/
+!/data/**/.gitkeep
+
+# Potentially large model and experiment artifacts
+/models/
+/artifacts/
+/runs/
+
+# Temporary operating-system and editor files
+*.log
+*.tmp
+*.bak
+*~
+.DS_Store
+Thumbs.db
