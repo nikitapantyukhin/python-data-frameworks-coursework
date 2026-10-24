@@ -44,3 +44,7 @@ htmlcov/
 *~
 .DS_Store
 Thumbs.db
+
+# Local image datasets (downloaded separately, not tracked)
+/dataset/
+
