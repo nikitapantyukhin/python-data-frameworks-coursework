@@ -1,7 +1,8 @@
-"""Download the reviewed Parquet publication of Geo Reviews Dataset 2023.
+"""Загрузка проверенной публикации Geo Reviews Dataset 2023 в формате Parquet.
 
-Run from the project root with ``python scripts/download_geo_reviews.py``.
-An existing file with the expected size is reused without a network request.
+Скрипт запускается из корня проекта командой
+``python scripts/download_geo_reviews.py``. Если файл ожидаемого размера уже
+существует, он используется повторно без сетевого запроса.
 """
 
 from pathlib import Path
@@ -17,7 +18,7 @@ EXPECTED_SIZE = 170_880_716
 
 
 def main() -> None:
-    """Download the exact file used by the EDA and verify its byte size."""
+    """Загрузить файл для EDA и проверить его размер в байтах."""
 
     DEST.mkdir(parents=True, exist_ok=True)
     expected_path = DEST / FILENAME

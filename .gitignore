@@ -27,7 +27,6 @@ htmlcov/
 !/data/README.md
 !/data/raw/
 !/data/raw/geo_reviews/
-!/data/raw/hard_hat/
 !/data/processed/
 !/data/synthetic/
 !/data/**/.gitkeep
