@@ -1,0 +1,26 @@
+{
+  "status": "prepared_not_run",
+  "seed": 20261118,
+  "base_sample_size_recommendation": 1000,
+  "splits": {
+    "train": 0.70,
+    "validation": 0.15,
+    "test": 0.15
+  },
+  "rules": {
+    "common_validation_and_test": true,
+    "manual_data_split": "train_only",
+    "group_related_normalized_texts": true,
+    "deduplicate_across_sources_and_splits": true,
+    "fit_preprocessing_on": "train_only",
+    "test_set_used_for_tuning": false,
+    "synthetic_source_split": "train_only"
+  },
+  "regimes": {
+    "original": "Geo Reviews working sample",
+    "manual": "original train + verified Otzyvru manual reviews",
+    "synthetic": "blocked until real synthetic data and method are approved",
+    "combined": "blocked until real synthetic data and method are approved"
+  },
+  "model": "to_be_agreed_with_instructor"
+}
