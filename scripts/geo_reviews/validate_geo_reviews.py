@@ -1,7 +1,7 @@
 """Валидация файла Geo Reviews в формате Parquet без изменения данных.
 
 Скрипт запускается из корня проекта командой
-``python scripts/validate_geo_reviews.py``. Предупреждения описывают допустимые
+``python -m scripts.geo_reviews.validate_geo_reviews``. Предупреждения описывают допустимые
 несовершенства данных и не приводят к ненулевому коду завершения.
 """
 
@@ -13,7 +13,7 @@ from pathlib import Path
 import pandas as pd
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATA_ROOT = ROOT / "data" / "raw" / "geo_reviews"
 PARQUET_RELATIVE_PATH = Path("data/train-00000-of-00001-49261e4e5a35a5a0.parquet")
 REQUIRED_COLUMNS = ("address", "name_ru", "rating", "rubrics", "text")

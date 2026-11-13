@@ -1,7 +1,7 @@
 """Валидация подмножества HaGRID без изменения исходных данных.
 
 Скрипт запускается из корня проекта командой
-``python scripts/validate_hagrid.py``. По умолчанию Pillow проверяет структуру
+``python -m scripts.hagrid.validate_hagrid``. По умолчанию Pillow проверяет структуру
 файлов с помощью ``Image.verify()``. Параметр ``--decode-images`` дополнительно
 выполняет полное декодирование пикселей методом ``Image.load()``. Ни один из
 режимов не изменяет изображения или аннотации.
@@ -19,7 +19,7 @@ from typing import Any
 from PIL import Image
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATA_ROOT = ROOT / "data" / "raw" / "hagrid"
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp"}
 ANNOTATION_FILES = (

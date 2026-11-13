@@ -1,7 +1,7 @@
 """Загрузка проверенной публикации Geo Reviews Dataset 2023 в формате Parquet.
 
 Скрипт запускается из корня проекта командой
-``python scripts/download_geo_reviews.py``. Если файл ожидаемого размера уже
+``python -m scripts.geo_reviews.download_geo_reviews``. Если файл ожидаемого размера уже
 существует, он используется повторно без сетевого запроса.
 """
 
@@ -10,7 +10,7 @@ from pathlib import Path
 from huggingface_hub import hf_hub_download
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEST = ROOT / "data" / "raw" / "geo_reviews"
 REPO_ID = "d0rj/geo-reviews-dataset-2023"
 FILENAME = "data/train-00000-of-00001-49261e4e5a35a5a0.parquet"
