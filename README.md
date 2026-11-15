@@ -18,17 +18,19 @@
 
 | Датасет | Использование в проекте | Текущий объём |
 | --- | --- | ---: |
-| [Geo Reviews Dataset 2023](https://github.com/yandex/geo-reviews-dataset-2023) | Источник русскоязычных отзывов; подготовлены сбалансированные предварительные выборки фастфуда на 200, 500 и 1 000 строк | 500 000 исходных отзывов |
+| [Geo Reviews Dataset 2023](https://github.com/yandex/geo-reviews-dataset-2023) | Источник русскоязычных отзывов; методика формирования основной выборки пересматривается | 500 000 исходных отзывов |
 | [HaGRIDv2](https://github.com/hukenovs/hagrid) | Классификация и детекция жестов рук | Подмножество: 34 000 изображений, 34 класса |
 
 Для HaGRIDv2 используются аннотации ограничивающих прямоугольников (bounding box, bbox), метки жестов и идентификаторы участников. Подробные сведения об источниках, составе и ограничениях приведены в [описании датасетов](docs/datasets.md).
 
 ## Состояние проекта
 
-Реализованы загрузка и валидация Geo Reviews, предметный отбор фастфуда,
-предварительные сбалансированные выборки и воспроизводимое разбиение варианта на
-1 000 строк. Дополнительно собраны и независимо размечены двумя участниками 200
-отзывов Otzyvru. Комплектная и независимая программные проверки подтвердили 199
+Реализованы загрузка и валидация исходного Geo Reviews. Прежняя основная
+выборка, построенная по общей рубрике «Быстрое питание», выведена из
+эксплуатации; новая основная выборка и её разбиения ещё не созданы. Требование
+курсовой — не менее 1 000 текстовых примеров — остаётся в силе. Дополнительно
+собраны и независимо размечены двумя участниками 200 отзывов Otzyvru.
+Комплектная и независимая программные проверки подтвердили 199
 совпадений, одно согласованное расхождение (ID 15), Percentage Agreement 99,5%,
 Cohen's Kappa 0,990 и итоговый баланс 100/100. Полные тексты и построчные
 материалы остаются в `.local/fastfood_annotation/`. Обучение моделей и
@@ -54,12 +56,11 @@ Cohen's Kappa 0,990 и итоговый баланс 100/100. Полные те�
 │   └── 02_hagrid_eda.ipynb
 ├── reports/
 │   ├── eda_summary.md
-│   ├── fastfood_eda_summary.md
 │   └── figures/
 ├── scripts/
 │   ├── geo_reviews/          # загрузка и валидация Geo Reviews
-│   ├── fastfood/             # подготовка, EDA и разбиения первого датасета
-│   │   └── quality/          # контроль ручной разметки и качества
+│   ├── fastfood/             # общие текстовые операции и контроль качества
+│   │   └── quality/          # аудит ручной разметки и сохранённых проверок
 │   └── hagrid/               # валидация HaGRIDv2
 ├── tests/
 │   └── test_fastfood_pipeline.py
@@ -83,22 +84,19 @@ python -m pip install -r requirements.txt
 ```bash
 python -m scripts.geo_reviews.download_geo_reviews
 python -m scripts.geo_reviews.validate_geo_reviews
-python -m scripts.fastfood.prepare_geo_fastfood
-python -m scripts.fastfood.quality.prepare_geo_quality_checks
-python -m scripts.fastfood.quality.audit_geo_quality_checks
 python -m scripts.fastfood.quality.audit_fastfood_annotations
 python -m scripts.fastfood.quality.check_review_overlap
-python -m scripts.fastfood.eda_fastfood
-python -m scripts.fastfood.prepare_fastfood_splits
 ```
 
-Для изолированного запуска EDA пути графиков и JSON-сводки можно задать явно:
+Сохранённые исторические результаты ручной проверки прежней Geo-выборки можно
+повторно валидировать без формирования датасета:
 
 ```bash
-python -m scripts.fastfood.eda_fastfood \
-  --figures-dir /tmp/fastfood_figures \
-  --summary-output /tmp/fastfood_eda_summary.json
+python -m scripts.fastfood.quality.audit_geo_quality_checks
 ```
+
+Команды подготовки основной Geo-выборки намеренно отсутствуют: новая методика
+отбора ещё не реализована.
 
 Валидация HaGRIDv2:
 
@@ -132,4 +130,3 @@ jupyter lab
 - [Методология исследования](docs/methodology.md)
 - [Результаты разведочного анализа данных](reports/eda_summary.md)
 - [Методика ручной разметки](docs/fastfood_annotation_methodology.md)
-- [EDA и рабочие выборки фастфуда](reports/fastfood_eda_summary.md)

@@ -2,26 +2,26 @@
 
 from __future__ import annotations
 
-import json
 import os
 import subprocess
 import sys
-import tempfile
 import unittest
 from pathlib import Path
 
 import pandas as pd
 
-from scripts.fastfood.fastfood_data import ensure_disjoint, normalize_text
-from scripts.fastfood.prepare_fastfood_splits import assign_splits
-from scripts.fastfood.prepare_geo_fastfood import (
+from scripts.fastfood.fastfood_data import (
+    assign_splits,
     balanced_sample,
     csv_export_frame,
+    ensure_disjoint,
+    normalize_text,
     rubric_set,
     serialize_rubric_set,
+    stratified_sample,
+    weak_label_from_rating,
 )
 from scripts.fastfood.quality.audit_fastfood_annotations import cohens_kappa
-from scripts.fastfood.quality.prepare_geo_quality_checks import stratified_sample
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,7 +49,7 @@ class FastfoodPipelineTests(unittest.TestCase):
 
     def test_rubric_serialization_ignores_python_hash_seed(self) -> None:
         code = (
-            "from scripts.fastfood.prepare_geo_fastfood import serialize_rubric_set; "
+            "from scripts.fastfood.fastfood_data import serialize_rubric_set; "
             "print(serialize_rubric_set({'Ресторан', 'Быстрое питание', 'Кафе'}))"
         )
         outputs = []
@@ -70,44 +70,14 @@ class FastfoodPipelineTests(unittest.TestCase):
             serialize_rubric_set(rubric_set("Кафе;Ресторан;Быстрое питание")),
         )
 
-    def test_eda_summary_output_can_be_redirected(self) -> None:
-        with tempfile.TemporaryDirectory() as temporary_directory:
-            temporary = Path(temporary_directory)
-            geo_sample = temporary / "geo.csv"
-            summary_output = temporary / "nested" / "summary.json"
-            pd.DataFrame(
-                {
-                    "weak_label": [0, 1],
-                    "rating": [1, 5],
-                    "text": [
-                        "synthetic negative fixture",
-                        "synthetic positive fixture",
-                    ],
-                }
-            ).to_csv(geo_sample, index=False)
-            subprocess.run(
-                [
-                    sys.executable,
-                    "-m",
-                    "scripts.fastfood.eda_fastfood",
-                    "--geo-sample",
-                    str(geo_sample),
-                    "--annotation-root",
-                    str(temporary / "missing_annotations"),
-                    "--figures-dir",
-                    str(temporary / "figures"),
-                    "--summary-output",
-                    str(summary_output),
-                ],
-                check=True,
-                capture_output=True,
-                text=True,
-                cwd=ROOT,
-            )
-            self.assertTrue(summary_output.is_file())
-            summary = json.loads(summary_output.read_text(encoding="utf-8"))
-            self.assertEqual(summary["geo_rows"], 2)
-            self.assertEqual(summary["manual_status"], "not_available")
+    def test_rating_to_weak_label_policy(self) -> None:
+        self.assertEqual(
+            [
+                weak_label_from_rating(value)
+                for value in (0, 1, 2, 3, 4, 5, None, pd.NA)
+            ],
+            [-1, 0, 0, -1, 1, 1, -1, -1],
+        )
 
     def test_balanced_sample_is_reproducible(self) -> None:
         frame = pd.DataFrame(
