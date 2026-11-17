@@ -1,0 +1,24 @@
+{
+  "source": {
+    "dataset_url": "https://huggingface.co/datasets/CNGR/CN_Gesture_Recognition",
+    "revision": "f4d9164b6e42175f921579dc11f8654b4f4c7ccc",
+    "license": "MIT"
+  },
+  "selection": {
+    "images_per_class": 50,
+    "expected_total": 200,
+    "near_duplicate_hamming_threshold": 4,
+    "manifest_name": "manual_selection_manifest.csv"
+  },
+  "class_mapping": {
+    "thumbs_up": "like",
+    "thumbs_down": "dislike",
+    "palm": "palm",
+    "fist_up": "fist"
+  },
+  "label_studio": {
+    "from_name": "gesture",
+    "to_name": "image",
+    "local_files_document_root": "data/processed/hagrid_manual_enrichment"
+  }
+}

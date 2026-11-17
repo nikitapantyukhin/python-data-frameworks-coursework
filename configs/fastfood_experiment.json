@@ -1,14 +1,71 @@
 {
-  "status": "base_sample_under_revision",
+  "status": "brand_sample_prepared",
+  "random_seed": 20261118,
   "base_sample": {
-    "status": "not_prepared",
-    "minimum_text_examples": 1000,
-    "selection_strategy": "to_be_defined"
+    "status": "prepared",
+    "rows": 1000,
+    "selection_strategy": "normalized organization-name whitelist plus exact fast-food rubric",
+    "brands": [
+      "KFC",
+      "Burger King",
+      "Вкусно — и точка",
+      "Rostic's"
+    ],
+    "sample_quotas_per_label": {
+      "KFC": 180,
+      "Burger King": 127,
+      "Вкусно — и точка": 179,
+      "Rostic's": 14
+    }
+  },
+  "split_quotas_per_brand_and_label": {
+    "KFC": {
+      "train": 126,
+      "validation": 27,
+      "test": 27
+    },
+    "Burger King": {
+      "train": 89,
+      "validation": 19,
+      "test": 19
+    },
+    "Вкусно — и точка": {
+      "train": 125,
+      "validation": 27,
+      "test": 27
+    },
+    "Rostic's": {
+      "train": 10,
+      "validation": 2,
+      "test": 2
+    }
   },
   "manual_annotations": {
     "status": "verified_and_preserved",
     "rows": 200,
-    "integration_strategy": "to_be_defined_after_base_split"
+    "integration_strategy": "train_only",
+    "brands": {
+      "KFC": 70,
+      "Burger King": 70,
+      "McDonald's": 60
+    }
+  },
+  "quality_checks": {
+    "random_seed": 20261118,
+    "sentiment_train_quotas_per_label": {
+      "KFC": 9,
+      "Burger King": 7,
+      "Вкусно — и точка": 7,
+      "Rostic's": 2
+    },
+    "brand_record_quotas": {
+      "KFC": 9,
+      "Burger King": 7,
+      "Вкусно — и точка": 10,
+      "Rostic's": 4
+    },
+    "fuzzy_threshold": 0.88,
+    "fuzzy_high_threshold": 0.95
   },
   "rules_to_preserve": {
     "deduplicate_across_sources_and_splits": true,

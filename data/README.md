@@ -1,61 +1,52 @@
-# Организация данных
+# Локальные данные
 
-Каталог `data/` предназначен для исходных, подготовленных и искусственно созданных данных. Содержимое датасетов исключено из Git.
+Исходные и производные датасеты исключены из Git. Репозиторий хранит только пустые каталоги, код, агрегированные отчёты и графики.
 
 ```text
 data/
 ├── raw/
 │   ├── geo_reviews/
-│   └── hagrid/
+│   ├── hagrid/
+│   └── cn_gesture_recognition/
 ├── processed/
 └── synthetic/
 ```
 
-## Geo Reviews Dataset 2023
+## Geo Reviews и Otzyvru
 
-Исходные данные загружаются из Parquet-публикации датасета:
+Исходный Parquet ожидается в `data/raw/geo_reviews/data/`. Результаты подготовки записываются в `data/processed/geo_fastfood_brands/` и `data/processed/fastfood_experiment/`. Полные тексты и ручные аннотации Otzyvru хранятся в `.local/fastfood_annotation/`.
 
 ```bash
 python -m scripts.geo_reviews.download_geo_reviews
 python -m scripts.geo_reviews.validate_geo_reviews
+python -m scripts.fastfood.prepare_geo_brand_sample
+python -m scripts.fastfood.prepare_fastfood_brand_splits
+python -m scripts.fastfood.validate_fastfood_brands
+python -m scripts.fastfood.eda_fastfood_brands
+python -m scripts.fastfood.quality.audit_fastfood_annotations
+python -m scripts.fastfood.quality.check_review_overlap
 ```
 
-Ожидаемый файл:
+Материалы ручного контроля основной тысячи находятся в `.local/geo_brands_quality_checks/` и проверяются командами:
 
-```text
-data/raw/geo_reviews/data/train-00000-of-00001-49261e4e5a35a5a0.parquet
+```bash
+python -m scripts.fastfood.quality.prepare_geo_brands_quality_checks
+python -m scripts.fastfood.quality.audit_geo_brands_quality_checks
 ```
 
-Основная выборка Geo Reviews находится на этапе пересмотра методики
-формирования. В `data/processed/` сейчас нет действующей основной текстовой
-выборки или разбиений; команда их подготовки будет добавлена после утверждения
-новых правил.
+## HaGRIDv2 и дополнительные изображения
 
-Полные тексты дополнительных отзывов и результаты независимой разметки
-размещаются в `.local/fastfood_annotation/`. Исторические файлы ручного
-контроля прежней Geo-выборки сохранены в `.local/geo_quality_checks/`; они не
-являются входом для ещё не созданной новой выборки.
+Подмножество HaGRIDv2 ожидается в `data/raw/hagrid/`. Исходные дополнительные изображения [CNGR/CN_Gesture_Recognition](https://huggingface.co/datasets/CNGR/CN_Gesture_Recognition) при воспроизведении размещаются в `data/raw/cn_gesture_recognition/` с исходными папками классов. Подготовленные 200 изображений и служебные manifests находятся в `data/processed/hagrid_manual_enrichment/`. Два экспорта Label Studio сохранены как `data/01_participant_1_processed.json` и `data/02_participant_2_processed.json`.
 
-## HaGRIDv2
-
-Используемое подмножество основано на [HaGRIDv2](https://github.com/hukenovs/hagrid) и публикации [GestureDetectionConnoisseurs/hagrid_subsets](https://huggingface.co/datasets/GestureDetectionConnoisseurs/hagrid_subsets). Исходные данные должны быть размещены в `data/raw/hagrid/`.
-
-Ожидаемая структура:
-
-```text
-data/raw/hagrid/
-├── call/
-├── ...
-├── xsign/
-├── annotations.json
-├── minimal-annotations.json
-└── exported_images.json
-```
-
-Проверка структуры, изображений и аннотаций:
+Локальный `manifests/manual_selection_manifest.csv` фиксирует ручной отбор, контрольные суммы и размеры файлов. Скрипт подготовки использует этот manifest и создаёт только пустые задачи Label Studio; готовая детекционная разметка источника не требуется.
 
 ```bash
 python -m scripts.hagrid.validate_hagrid
+python -m scripts.hagrid.prepare_manual_enrichment
+python -m scripts.hagrid.validate_manual_enrichment
+python -m scripts.hagrid.analyze_label_studio_exports \
+  --participant-1 data/01_participant_1_processed.json \
+  --participant-2 data/02_participant_2_processed.json
 ```
 
-Подробное описание состава данных и известных ограничений приведено в [описании датасетов](../docs/datasets.md).
+Каталог `data/synthetic/` зарезервирован для будущего этапа. Искусственные данные пока не создавались.
